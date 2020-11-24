@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/css/bootstrapValidator.min.css"/>
+<link href="{{ url_for('static', filename='style.css') }}" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.2/js/bootstrapValidator.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<div class="container">
+    <div class="text-center" style="padding:50px 0">
+	<div class="row">
+		<form role="form" id="contact-form" class="contact-form" method="post">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>
+                                The submitted review most likely..
+                            </h4>
+                        </div>
+                  	</div>
+                    <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <button class="btn {{ result.lower() }}-btn">A <b>{{ result }}</b> one</button>
+                        </div>
+                  </div>
+                  </div>
+                </form>
+	</div>
+    </div>
+</div>

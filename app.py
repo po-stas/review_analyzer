@@ -5,6 +5,8 @@ from scrapy.settings import Settings
 from review_parser import settings
 from review_parser.spiders.kinopoisk import KinopoiskSpider
 from scrapy.utils.log import configure_logging
+from flask import render_template
+from flask import request
 
 import pandas as pd
 import numpy as np
@@ -17,11 +19,14 @@ from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 import dill
 
 app = Flask(__name__)
-
+review_type = ['Negative', 'Neutral', 'Positive']
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def index_view():
+    return '<h1>Review Analyzer</h1><BR><BR>' \
+           'To analyze your review, please proceed to /check_review/<BR>' \
+           'To get new training data from kinopoisk.ru go to /fetch_data/<BR>' \
+           'To train model on newly-fetched data visit /fit_model/'
 
 
 @app.route('/fetch_data/')
@@ -49,10 +54,10 @@ def fit_model():
 
     pipeline = Pipeline([
         ('vect', CountVectorizer(ngram_range=(1, 2))),
-        ('tfidf', TfidfTransformer(use_idf=False)),
+        ('tfidf', TfidfTransformer(use_idf=True)),
         ('clf', SGDClassifier(loss='hinge', penalty='l2',
-                              alpha=5e-4, random_state=100,
-                              max_iter=150, tol=None)),
+                              alpha=1e-9, random_state=0,
+                              max_iter=1000, tol=None)),
     ])
 
     X_train, X_test, y_train, y_test = train_test_split(data_labelled, data_labelled['grade'], random_state=0,
@@ -67,8 +72,19 @@ def fit_model():
 
     return 'Model is ready!<BR>' \
            'Model accuracy score on test subset is {}<BR>{}<BR>' \
-           'Now you can make predictions for your reviews on /get_review_type/'\
+           'Now you can make predictions for your reviews on /check_review/'\
         .format(str(acc), full_metrics.replace('\n', '<BR>'))
+
+
+@app.route('/check_review/', methods=['GET', 'POST'])
+def check_review():
+    if request.method == 'GET':
+        return render_template('check_model.html')
+    if request.method == 'POST':
+        with open("model.dill", "rb") as f:
+            model = dill.load(f)
+        result = model.predict([request.form['review']])
+        return render_template('result.html', result=review_type[int(result)])
 
 
 if __name__ == '__main__':

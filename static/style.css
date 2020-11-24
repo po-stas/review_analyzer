@@ -1,0 +1,17 @@
+.contact-form{ margin-top:15px;}
+.contact-form .textarea{ min-height:220px; resize:none;}
+.form-control{ box-shadow:none; border-color:#eee; height:49px;}
+.form-control:focus{ box-shadow:none; border-color:#00b09c;}
+.form-control-feedback{ line-height:50px;}
+.main-btn{ background:#00b09c; border-color:#00b09c; color:#fff;}
+.main-btn:hover{ background:#00a491;color:#fff;}
+.positive-btn{ background:green; border-color:green; color:#fff;}
+.positive-btn:hover{ background:darkgreen;color:#fff;}
+.negative-btn{ background:darkred; border-color:darkred; color:#fff;}
+.negative-btn:hover{ background:red;color:#fff;}
+.neutral-btn{ background:dimgray; border-color:dimgray; color:#fff;}
+.neutral-btn:hover{ background:slategray;color:#fff;}
+.form-control-feedback {
+line-height: 50px;
+top: 0px;
+}
