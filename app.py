@@ -1,12 +1,7 @@
 from flask import Flask
-from scrapy.crawler import CrawlerRunner
-from twisted.internet import reactor
-from scrapy.settings import Settings
-from review_parser import settings
-from review_parser.spiders.kinopoisk import KinopoiskSpider
-from scrapy.utils.log import configure_logging
 from flask import render_template
 from flask import request
+import subprocess
 
 import pandas as pd
 import numpy as np
@@ -31,15 +26,11 @@ def index_view():
 
 @app.route('/fetch_data/')
 def fetch_data():
-    configure_logging()
-    crawler_settings = Settings()
-    crawler_settings.setmodule(settings)
-    runner = CrawlerRunner(settings=crawler_settings)
-    runner.crawl(KinopoiskSpider)
-    d = runner.join()
-    d.addBoth(lambda _: reactor.stop())
 
-    reactor.run()
+    spider_name = "kinopoisk"
+    subprocess.check_output(['scrapy', 'crawl', spider_name, "-o", "output.json"])
+    # with open("output.json") as items_file:
+    #     return items_file.read()
 
     return 'All reviews fetched!<BR>Now you can manually train the model by visiting /fit_model/'
 

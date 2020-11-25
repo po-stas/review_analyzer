@@ -15,7 +15,7 @@ from review_parser.items import ReviewParserItem
 class ReviewParserPipeline:
 
     def __init__(self):
-        client = MongoClient('localhost', 27017)
+        client = MongoClient('mongo', 27017)  # service name in docker-compose.yml
         self.db = client['scrapyDB']
         self.db["kinopoisk"].drop()
 

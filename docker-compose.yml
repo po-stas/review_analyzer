@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/reviews
+    environment:
+      FLASK_ENV: development
+    links:
+      - mongo
+    depends_on:
+      - mongo
